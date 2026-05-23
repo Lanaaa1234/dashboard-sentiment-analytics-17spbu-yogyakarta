@@ -63,12 +63,10 @@ SPBU-SENTIMENT-DASHBOARD/
 │   └── dataset_spbu.csv
 │
 ├── pages/
-│   ├── 1_📊_Overview.py
-│   ├── 2_📈_EDA.py
-│   ├── 3_🧠_Text_Mining.py
-│   ├── 4_🤖_Modelling.py
-│   ├── 5_📁_Dataset.py
-│   └── 6_ℹ️_About.py
+│   ├── 1_📈_EDA.py
+│   ├── 2_🤖_Modelling.py
+│   ├── 3_📁_Dataset.py
+│   └── 4_ℹ️_About.py
 │
 ├── utils/
 │   ├── helper.py

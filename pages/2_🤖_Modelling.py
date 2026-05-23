@@ -4,15 +4,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 import joblib
 
-from utils.global_filter import global_filter
-from utils.global_header import global_header
-
 from sklearn.model_selection import (
     train_test_split
 )
 
 from sklearn.metrics import (
-
     accuracy_score,
     precision_score,
     recall_score,
@@ -27,9 +23,7 @@ from utils.helper import (
     load_data
 )
 
-
 from utils.cards import (
-
     metric_card,
     section_header,
     info_card,
@@ -51,14 +45,18 @@ from utils.insights import (
     final_model_insight
 )
 
+# =========================================================
 # PAGE CONFIG
+# =========================================================
 st.set_page_config(
     page_title="Comparative ML Dashboard",
     page_icon="🤖",
     layout="wide"
 )
 
+# =========================================================
 # LOAD CSS
+# =========================================================
 with open("assets/style.css") as f:
 
     st.markdown(
@@ -66,24 +64,31 @@ with open("assets/style.css") as f:
         unsafe_allow_html=True
     )
 
+# =========================================================
 # LOAD DATA
+# =========================================================
 with st.spinner("Loading modelling dashboard..."):
 
     df = load_data()
-    
+
 df["text_kalimat"] = (
     df["text_kalimat"]
     .fillna("")
     .astype(str)
 )
-# FILTER
+
+# =========================================================
+# FILTERED DATA
+# =========================================================
 if "filtered_df" not in st.session_state:
 
     st.session_state.filtered_df = df.copy()
 
 filtered_df = st.session_state.filtered_df
 
+# =========================================================
 # HEADER
+# =========================================================
 st.markdown(
     """
     <div style="
@@ -124,9 +129,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# =========================================================
 # LOAD MODEL
+# =========================================================
 @st.cache_resource
-
 def load_models():
 
     models = {
@@ -155,7 +161,9 @@ def load_models():
 
 models, tfidf = load_models()
 
+# =========================================================
 # PREPARE DATA
+# =========================================================
 X = (
     filtered_df["text_kalimat"]
     .fillna("")
@@ -166,10 +174,14 @@ y = filtered_df[
     "sentiment_label"
 ]
 
-# TFIDF TRANSFORM
+# =========================================================
+# TF-IDF TRANSFORM
+# =========================================================
 X_tfidf = tfidf.transform(X)
 
-# SPLIT
+# =========================================================
+# TRAIN TEST SPLIT
+# =========================================================
 X_train, X_test, y_train, y_test = train_test_split(
 
     X_tfidf,
@@ -182,10 +194,12 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
-# SUMMARY
+# =========================================================
+# MACHINE LEARNING PIPELINE
+# =========================================================
 section_header(
-    "Machine Learning Summary",
-    "Ringkasan comparative machine learning."
+    "Machine Learning Pipeline",
+    "Tahapan preprocessing dan comparative machine learning."
 )
 
 col1, col2, col3 = st.columns(3)
@@ -216,13 +230,106 @@ with col3:
 
 success_card(
     """
-    Dashboard menggunakan model machine learning
-    yang telah ditraining sebelumnya
-    menggunakan TF-IDF vectorization.
+    Dataset telah melalui proses preprocessing,
+    TF-IDF vectorization,
+    serta pembagian train-test sebelum dilakukan
+    proses comparative machine learning.
     """
 )
 
-# EVALUATION
+# =========================================================
+# DISTRIBUSI LABEL TRAIN TEST
+# =========================================================
+section_header(
+    "Distribusi Label Train-Test",
+    "Distribusi label sentimen pada data training dan testing."
+)
+
+train_count = (
+    y_train
+    .value_counts()
+    .reset_index()
+)
+
+train_count.columns = [
+    "Label",
+    "Jumlah"
+]
+
+test_count = (
+    y_test
+    .value_counts()
+    .reset_index()
+)
+
+test_count.columns = [
+    "Label",
+    "Jumlah"
+]
+
+col1, col2 = st.columns(2)
+
+# TRAIN
+with col1:
+
+    fig = px.bar(
+        train_count,
+        x="Label",
+        y="Jumlah",
+        text="Jumlah",
+        color="Jumlah",
+        color_continuous_scale="Greens"
+    )
+
+    fig.update_traces(
+        textposition="outside"
+    )
+
+    fig.update_layout(
+        title="Distribusi Label Train",
+        template="plotly_white",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        height=500
+    )
+
+    st.plotly_chart(
+        fig,
+        width="stretch"
+    )
+
+# TEST
+with col2:
+
+    fig = px.bar(
+        test_count,
+        x="Label",
+        y="Jumlah",
+        text="Jumlah",
+        color="Jumlah",
+        color_continuous_scale="Reds"
+    )
+
+    fig.update_traces(
+        textposition="outside"
+    )
+
+    fig.update_layout(
+        title="Distribusi Label Test",
+        template="plotly_white",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        height=500
+    )
+
+    st.plotly_chart(
+        fig,
+        width="stretch"
+    )
+
+# =========================================================
+# MODEL EVALUATION
+# =========================================================
 results = []
 
 predictions = {}
@@ -269,7 +376,9 @@ results_df = pd.DataFrame(
     results
 )
 
+# =========================================================
 # BEST MODEL
+# =========================================================
 best_model = (
 
     results_df
@@ -280,7 +389,9 @@ best_model = (
     .iloc[0]
 )
 
-# KPI
+# =========================================================
+# BEST MODEL SUMMARY
+# =========================================================
 section_header(
     "Best Model Evaluation",
     "Ringkasan performa model terbaik."
@@ -324,7 +435,9 @@ success_card(
     model_insight(results_df)
 )
 
-# METRIC TABLE
+# =========================================================
+# EVALUATION TABLE
+# =========================================================
 section_header(
     "Evaluation Metric Table",
     "Perbandingan performa model machine learning."
@@ -346,10 +459,12 @@ st.dataframe(
         "{:.4f}"
     }),
 
-    use_container_width=True
+    width="stretch"
 )
 
-# METRIC CHART
+# =========================================================
+# METRIC COMPARISON
+# =========================================================
 section_header(
     "Metric Comparison",
     "Visualisasi comparative machine learning."
@@ -405,10 +520,12 @@ fig.update_layout(
 
 st.plotly_chart(
     fig,
-    use_container_width=True
+    width="stretch"
 )
 
+# =========================================================
 # CONFUSION MATRIX
+# =========================================================
 section_header(
     "Confusion Matrix",
     "Visualisasi confusion matrix masing-masing model."
@@ -436,7 +553,7 @@ for idx, model_name in enumerate(models.keys()):
 
         st.plotly_chart(
             fig,
-            use_container_width=True
+            width="stretch"
         )
 
         info_card(
@@ -445,7 +562,9 @@ for idx, model_name in enumerate(models.keys()):
             )
         )
 
+# =========================================================
 # ROC CURVE
+# =========================================================
 section_header(
     "ROC Curve",
     "Perbandingan ROC Curve antar model."
@@ -511,7 +630,6 @@ for name, model in models.items():
         )
     )
 
-# RANDOM LINE
 fig.add_trace(
 
     go.Scatter(
@@ -535,14 +653,16 @@ fig = roc_curve_layout(fig)
 
 st.plotly_chart(
     fig,
-    use_container_width=True
+    width="stretch"
 )
 
 info_card(
     roc_insight()
 )
 
+# =========================================================
 # CLASSIFICATION REPORT
+# =========================================================
 section_header(
     "Classification Report",
     "Detail classification report masing-masing model."
@@ -569,10 +689,12 @@ for name in models.keys():
 
         st.dataframe(
             report_df,
-            use_container_width=True
+            width="stretch"
         )
 
+# =========================================================
 # ACTUAL VS PREDICTION
+# =========================================================
 section_header(
     "Actual vs Prediction",
     "Perbandingan label aktual dan hasil prediksi model terbaik."
@@ -597,7 +719,6 @@ sample_df["Index"] = range(
 
 fig = go.Figure()
 
-# ACTUAL
 fig.add_trace(
 
     go.Scatter(
@@ -617,7 +738,6 @@ fig.add_trace(
     )
 )
 
-# PREDICTION
 fig.add_trace(
 
     go.Scatter(
@@ -665,19 +785,23 @@ fig.update_layout(
 
 st.plotly_chart(
     fig,
-    use_container_width=True
+    width="stretch"
 )
 
 warning_card(
     actual_prediction_insight()
 )
 
+# =========================================================
 # FINAL INSIGHT
+# =========================================================
 success_card(
     final_model_insight(
         best_model["Model"]
     )
 )
 
+# =========================================================
 # FOOTER
+# =========================================================
 page_footer()
