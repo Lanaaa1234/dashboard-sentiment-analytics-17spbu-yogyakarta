@@ -55,10 +55,10 @@ def add_text_length(df):
 
     df["text_length"] = (
         df["text_kalimat"]
+        .fillna("")
         .astype(str)
         .apply(
-            lambda x:
-            len(x.split())
+            lambda x: len(x.split())
         )
     )
 
@@ -184,10 +184,10 @@ def dataset_summary(df):
         "avg_text_length":
         round(
             df["text_kalimat"]
+            .fillna("")
             .astype(str)
             .apply(
-                lambda x:
-                len(x.split())
+                lambda x: len(x.split())
             )
             .mean(),
             2

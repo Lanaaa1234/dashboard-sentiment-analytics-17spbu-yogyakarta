@@ -41,6 +41,12 @@ with st.spinner("Loading dataset dashboard..."):
 
     df = load_data()
 
+df["text_kalimat"] = (
+    df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
+
 # FILTER
 if "filtered_df" not in st.session_state:
 

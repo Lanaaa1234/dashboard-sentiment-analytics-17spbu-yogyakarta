@@ -87,6 +87,12 @@ with st.spinner("Loading modelling dashboard..."):
 
     df = load_data()
 
+df["text_kalimat"] = (
+    df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
+
 if "filtered_df" not in st.session_state:
 
     st.session_state.filtered_df = df.copy()
@@ -166,9 +172,11 @@ with col3:
     )
 
 # PREPARE DATA
-X = filtered_df[
-    "text_kalimat"
-].astype(str)
+X = (
+    filtered_df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
 
 y = filtered_df[
     "sentiment_label"

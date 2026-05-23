@@ -62,6 +62,12 @@ with st.spinner("Loading about dashboard..."):
 
     df = load_data()
 
+df["text_kalimat"] = (
+    df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
+
 # =========================================================
 # FILTERED DATA
 # =========================================================

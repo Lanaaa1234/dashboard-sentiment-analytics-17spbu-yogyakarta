@@ -70,7 +70,12 @@ with open("assets/style.css") as f:
 with st.spinner("Loading modelling dashboard..."):
 
     df = load_data()
-
+    
+df["text_kalimat"] = (
+    df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
 # FILTER
 if "filtered_df" not in st.session_state:
 
@@ -151,9 +156,11 @@ def load_models():
 models, tfidf = load_models()
 
 # PREPARE DATA
-X = filtered_df[
-    "text_kalimat"
-].astype(str)
+X = (
+    filtered_df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
 
 y = filtered_df[
     "sentiment_label"

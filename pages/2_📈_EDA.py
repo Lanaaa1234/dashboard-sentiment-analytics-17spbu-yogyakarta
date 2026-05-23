@@ -55,7 +55,11 @@ with open("assets/style.css") as f:
 with st.spinner("Loading EDA dashboard..."):
 
     df = load_data()
-    
+df["text_kalimat"] = (
+    df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
 if "filtered_df" not in st.session_state:
 
     st.session_state.filtered_df = df.copy()
