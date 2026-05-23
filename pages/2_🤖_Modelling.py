@@ -459,7 +459,7 @@ st.dataframe(
         "{:.4f}"
     }),
 
-    width="stretch"
+    use_container_width=True
 )
 
 # =========================================================
