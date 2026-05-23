@@ -605,11 +605,6 @@ st.dataframe(
 )
 
 # FINAL INSIGHT
-section_header(
-    "Kesimpulan EDA",
-    ""
-)
-
 success_card(
     """
     Hasil Exploratory Data Analysis menunjukkan

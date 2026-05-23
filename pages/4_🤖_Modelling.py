@@ -673,11 +673,6 @@ warning_card(
 )
 
 # FINAL INSIGHT
-section_header(
-    "Kesimpulan Comparative Machine Learning",
-    ""
-)
-
 success_card(
     final_model_insight(
         best_model["Model"]

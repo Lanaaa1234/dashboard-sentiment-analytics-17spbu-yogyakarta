@@ -403,7 +403,7 @@ preview_df.columns = [
 
 st.dataframe(
     preview_df.head(10),
-    width="stretch",
+    width=1200,
     height=420
 )
 

@@ -337,10 +337,6 @@ st.dataframe(
 )
 
 # FINAL INSIGHT
-section_header(
-    "Kesimpulan Dataset",
-    ""
-)
 
 success_card(
     """
