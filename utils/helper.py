@@ -17,6 +17,18 @@ def load_data():
         "dataset_spbu_preprocessing.csv"
     )
 
+    # HANDLE NULL TEXT
+    df["text_kalimat"] = (
+        df["text_kalimat"]
+        .fillna("")
+        .astype(str)
+    )
+
+    df["text"] = (
+        df["text"]
+        .fillna("")
+        .astype(str)
+    )
     return df
 
 

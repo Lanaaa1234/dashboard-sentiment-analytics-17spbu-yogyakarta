@@ -131,9 +131,11 @@ positive_pct, negative_pct = sentiment_percentage(
 # =========================================================
 # SIMPLE MODELLING
 # =========================================================
-X = filtered_df[
-    "text_kalimat"
-].astype(str)
+X = (
+    filtered_df["text_kalimat"]
+    .fillna("")
+    .astype(str)
+)
 
 y = filtered_df[
     "sentiment_label"
