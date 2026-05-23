@@ -52,8 +52,17 @@ Dataset mencakup:
 - Hasil preprocessing
 - Label sentimen
 
+# 👤 _Author & Contact_  
+- **Nama**         : Maulana Diki Wicaksono
+- **Email**        : maulanadiki963@gmail.com  
+- **GitHub**       : [github.com/Lanaaa1234](https://github.com/Lanaaa1234)  
+- **LinkedIn**     : [linkedin.com/in/maulana-diki-wicaksono](https://www.linkedin.com/in/maulana-diki-wicaksono/)  
+- **Instagram**:   : [@maulanadikii_24](https://www.instagram.com/maulanadikii_24/)  
+
+---
 
 # 📂 Struktur Project
+```
 SPBU-SENTIMENT-DASHBOARD/
 │
 ├── assets/
@@ -80,7 +89,3 @@ SPBU-SENTIMENT-DASHBOARD/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
-
-# 👨‍💻 Authors
-© 2026
-Maulana Diki Wicaksono
