@@ -689,7 +689,7 @@ for name in models.keys():
 
         st.dataframe(
             report_df,
-            width="stretch"
+            use_container_width=True
         )
 
 # =========================================================
